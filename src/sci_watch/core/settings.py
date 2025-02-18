@@ -1,7 +1,7 @@
 import os
-from typing import Literal
+from typing import Literal, Optional
 
-from pydantic import Field
+from pydantic import Field, ConfigDict
 from pydantic_settings import BaseSettings
 
 
@@ -9,19 +9,17 @@ class Settings(BaseSettings):
     """
     Settings class, loaded from .env file
     """
-
+    model_config = ConfigDict(extra='ignore', frozen=True)
+    
     log_level: Literal[
         "NOTSET", "DEBUG", "INFO", "WARNING", "ERROR", "FATAL", "CRITICAL"
-    ] = os.getenv("log_level", "DEBUG")
-    gmail_sender: str = os.getenv("gmail_sender")
-    gmail_token: str = os.getenv("gmail_token")
-    grammar_path: str = os.getenv("grammar_path")
-    http_proxy: str = os.getenv("http_proxy", None)
-    https_proxy: str = os.getenv("https_proxy", None)
-    log_file_path: str = os.getenv("log_file_path", None)
-
-    class Config:
-        allow_mutation = False
+    ] = Field(default="DEBUG")
+    gmail_sender: str
+    gmail_token: str 
+    grammar_path: str
+    http_proxy: Optional[str] = Field(default=None)
+    https_proxy: Optional[str] = Field(default=None)
+    log_file_path: Optional[str] = Field(default=None)
 
 
 settings = Settings(_env_file=".env", _env_file_encoding="utf-8")

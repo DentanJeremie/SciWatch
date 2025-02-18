@@ -1,3 +1,4 @@
+import os
 from typing import Literal
 
 from pydantic import Field
@@ -11,13 +12,13 @@ class Settings(BaseSettings):
 
     log_level: Literal[
         "NOTSET", "DEBUG", "INFO", "WARNING", "ERROR", "FATAL", "CRITICAL"
-    ] = Field(env="log_level", default="DEBUG")
-    gmail_sender: str = Field(env="gmail_sender")
-    gmail_token: str = Field(env="gmail_token")
-    grammar_path: str = Field(env="grammar_path")
-    http_proxy: str = Field(env="http_proxy", default=None)
-    https_proxy: str = Field(env="https_proxy", default=None)
-    log_file_path: str = Field(env="log_file_path", default=None)
+    ] = os.getenv("log_level", "DEBUG")
+    gmail_sender: str = os.getenv("gmail_sender")
+    gmail_token: str = os.getenv("gmail_token")
+    grammar_path: str = os.getenv("grammar_path")
+    http_proxy: str = os.getenv("http_proxy", None)
+    https_proxy: str = os.getenv("https_proxy", None)
+    log_file_path: str = os.getenv("log_file_path", None)
 
     class Config:
         allow_mutation = False
